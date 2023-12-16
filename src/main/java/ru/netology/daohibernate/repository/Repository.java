@@ -1,22 +1,16 @@
 package ru.netology.daohibernate.repository;
 
-import lombok.AllArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import ru.netology.daohibernate.entity.Persons;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
-@AllArgsConstructor
 @org.springframework.stereotype.Repository
-public class Repository {
-    @PersistenceContext
-    private EntityManager entityManager;
+public interface Repository extends JpaRepository<Persons, Integer> {
+    List<Persons> findByCityOfLiving(String city);
 
-    public List<Persons> getPersonsByCity(String city) {
-        return entityManager.createQuery("select person from Persons person WHERE person.cityOfLiving = :city",
-                        Persons.class)
-                .setParameter("city", city)
-                .getResultList();
-    }
+    List<Persons> findByAgeLessThanOrderByAge(int age);
+
+    Optional<Persons> findByNameAndSurname(String name, String surname);
 }
